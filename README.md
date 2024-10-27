@@ -9,3 +9,8 @@ Usage:- ./isprime2.bin number
 
 0 <= number < 2^64
 
+e.g. ./isprime2.bin 18361375334787048247
+
+18361375334787048247 is proven prime.
+
+Next proven prime is 18361375334787048287
