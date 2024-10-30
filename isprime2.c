@@ -15,7 +15,10 @@ _Bool loadprimegaps(uint8_t **primegaps, char *filename) {
   FILE *fp = fopen(filename, "rb");
   if (fp == NULL) return false;
   *primegaps = malloc(NUMOF32BITPRIMES-2);
-  if (*primegaps == NULL) return false;
+  if (*primegaps == NULL) {
+    fclose(fp);
+    return false;
+  }
   size_t bytes = fread(*primegaps, 1, NUMOF32BITPRIMES-2, fp);
   fclose(fp);
   if (bytes != NUMOF32BITPRIMES-2) return false;
@@ -37,12 +40,27 @@ uint8_t *loadprimegaps0(char *filename) {
   uint64_t primesum = 5;
   uint32_t prevprime = 3;
   uint32_t prime, diff;
-  if (fscanf(fp, "%u", &prime) != 1) return NULL;
-  if (prime != 2) return NULL;
-  if (fscanf(fp, "%u", &prime) != 1) return NULL;
-  if (prime != 3) return NULL;
+  if (fscanf(fp, "%u", &prime) != 1) {
+    fclose(fp);
+    return NULL;
+  }
+  if (prime != 2) {
+    fclose(fp);
+    return NULL;
+  }
+  if (fscanf(fp, "%u", &prime) != 1) {
+    fclose(fp);
+    return NULL;
+  }
+  if (prime != 3) {
+    fclose(fp);
+    return NULL;
+  }
   uint8_t *res = malloc(NUMOF32BITPRIMES-2);
-  if (res == NULL) return NULL;
+  if (res == NULL) {
+    fclose(fp);
+    return NULL;
+  }
   uint32_t i = 0;
   while (fscanf(fp, "%u", &prime) == 1) {
     diff = prime - prevprime;
