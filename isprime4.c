@@ -18,7 +18,7 @@ typedef struct {
 
 char* primesfilename = "primes.txt";
 char* primedivcheckfilename = "primedivcheck4.dat";
-// sha256(primedivcheckfilename) = c111ad95d2ff1e485fefb00918b21c9cb6bcc0c6d5dcf4206ba15e527cfecbba
+// sha256(primedivcheckfilename) = a419a7db179f4190b4c2380a900009b119ddef23ccfb0c90cdf9811d0c48d910
 
 uint64_t isprime3_gettimems(void) {
   struct timeval thistime;
