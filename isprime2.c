@@ -196,7 +196,7 @@ int main(int argc, char** argv) {
       primegaps = loadprimegaps0(primesfilename);
       if (primegaps) {
         if (!saveprimegaps(primegaps, primegapsfilename)) {
-          printf("Save of %s failed.\n", primesfilename);          
+          printf("Save of %s failed.\n", primegapsfilename);          
         }
       } else {
         printf("Load of %s failed.\n", primesfilename);  
