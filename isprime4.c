@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include </home/simon/fastmodinvpow2fns.c>
+#include </home/simon/fastmodinvpow2fns.c> // See https://github.com/FastAsChuff/Fast-Modular-Inverse-Modulo-Powers-Of-2
 
 // gcc isprime4.c -o isprime4.bin -lm -O3 -march=native -Wall
 #define NUMOF32BITPRIMES 203280221
