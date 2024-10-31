@@ -28,6 +28,7 @@ uint64_t isprime3_gettimems(void) {
 
 void primedivcheckfree(primedivcheck_t *primedivcheck) {
   free(primedivcheck->p);
+  primedivcheck->p = NULL;
   free(primedivcheck->a);
   free(primedivcheck->m);
 } 
@@ -43,18 +44,21 @@ _Bool loadprimedivcheck(primedivcheck_t *primedivcheck, char *filename) {
   size_t bytes = fread(primedivcheck->p, 1, SIZEOFDIVCHECKARRAYP, fp);
   if (bytes != SIZEOFDIVCHECKARRAYP) {
     free(primedivcheck->p);
+    primedivcheck->p = NULL;
     fclose(fp);
     return false;
   }
   primedivcheck->a = malloc(SIZEOFDIVCHECKARRAY);
   if (primedivcheck->a == NULL) {
     free(primedivcheck->p);
+    primedivcheck->p = NULL;
     fclose(fp);
     return false;
   }
   bytes = fread(primedivcheck->a, 1, SIZEOFDIVCHECKARRAY, fp);
   if (bytes != SIZEOFDIVCHECKARRAY) {
     free(primedivcheck->p);
+    primedivcheck->p = NULL;
     free(primedivcheck->a);
     fclose(fp);
     return false;
@@ -62,6 +66,7 @@ _Bool loadprimedivcheck(primedivcheck_t *primedivcheck, char *filename) {
   primedivcheck->m = malloc(SIZEOFDIVCHECKARRAY);
   if (primedivcheck->m == NULL) {
     free(primedivcheck->p);
+    primedivcheck->p = NULL;
     free(primedivcheck->a);
     fclose(fp);
     return false;
@@ -69,6 +74,7 @@ _Bool loadprimedivcheck(primedivcheck_t *primedivcheck, char *filename) {
   bytes = fread(primedivcheck->m, 1, SIZEOFDIVCHECKARRAY, fp);
   if (bytes != SIZEOFDIVCHECKARRAY) {
     free(primedivcheck->p);
+    primedivcheck->p = NULL;
     free(primedivcheck->a);
     free(primedivcheck->m);
     fclose(fp);
@@ -121,12 +127,14 @@ _Bool loadprimedivcheck0(primedivcheck_t *primedivcheck, char *filename) {
   primedivcheck->a = malloc(SIZEOFDIVCHECKARRAY);
   if (primedivcheck->a == NULL) {
     free(primedivcheck->p);
+    primedivcheck->p = NULL;
     fclose(fp);
     return false;
   }
   primedivcheck->m = malloc(SIZEOFDIVCHECKARRAY);
   if (primedivcheck->m == NULL) {
     free(primedivcheck->p);
+    primedivcheck->p = NULL;
     free(primedivcheck->a);
     fclose(fp);
     return false;
@@ -249,18 +257,16 @@ int main(int argc, char** argv) {
   primedivcheck_t primedivcheck;
   primedivcheck.p = NULL;
   uint64_t n = atou64(argv[1]);
-  if (n > 1000000000000000ULL) {
-    if (!loadprimedivcheck(&primedivcheck, primedivcheckfilename)) {
-      printf("Load of %s failed.\n", primedivcheckfilename);
-      // See https://github.com/FastAsChuff/Primes-List
-      // Create primes.txt = all 32bit primes = output of primeslist.bin 203280221
-      if (loadprimedivcheck0(&primedivcheck, primesfilename)) {
-        if (!saveprimedivcheck(primedivcheck, primedivcheckfilename)) {
-          printf("Save of %s failed.\n", primedivcheckfilename);          
-        }
-      } else {
-        printf("Load of %s failed.\n", primesfilename);  
+  if (!loadprimedivcheck(&primedivcheck, primedivcheckfilename)) {
+    printf("Load of %s failed.\n", primedivcheckfilename);
+    // See https://github.com/FastAsChuff/Primes-List
+    // Create primes.txt = all 32bit primes = output of primeslist.bin 203280221
+    if (loadprimedivcheck0(&primedivcheck, primesfilename)) {
+      if (!saveprimedivcheck(primedivcheck, primedivcheckfilename)) {
+        printf("Save of %s failed.\n", primedivcheckfilename);          
       }
+    } else {
+      printf("Load of %s failed.\n", primesfilename);  
     }
   }
   uint64_t next;
