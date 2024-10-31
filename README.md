@@ -31,6 +31,8 @@ Usage:- ./isprime4.bin number
 
 e.g. ./isprime4.bin 18446744073680551637
 
+18446744073680551637 is proven prime.
+
 Time of test = 625 ms
 
 Next proven prime is 18446744073680551639
