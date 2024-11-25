@@ -66,32 +66,6 @@ uint32_t isqrt(uint64_t n) {
   return ai;
 }
 
-uint32_t modpowu64b(uint32_t a, uint64_t e, uint32_t n) {
-  uint32_t res = 1;
-  uint32_t sq = a;
-  while (e) {
-    if (e & 1ULL) res = ((uint64_t)res * sq) % n;
-    sq = ((uint64_t)sq*sq) % n;
-    e >>= 1;
-  }
-  return res;
-}
-
-uint64_t modpowu64(uint64_t a, uint64_t e, uint64_t n) {
-// Returns a^e mod n
-  if (n < 2) return 0;
-  if (a < 2) return a;
-  if (n <= 0xffffffff) return modpowu64b(a % n, e, n);
-  uint64_t res = 1;
-  uint64_t sq = a;
-  while (e) {
-    if (e & 1ULL) res = ((unsigned __int128)res * sq) % n;
-    sq = ((unsigned __int128)sq*sq) % n;
-    e >>= 1;
-  }
-  return res;
-}
-
 _Bool inascarrayu64(uint64_t n, uint64_t *array, uint64_t arraysize) {
   // Binary Search. Array is assumed sorted ascending.
   if ((n < array[0]) || (n > array[arraysize-1])) return false;
