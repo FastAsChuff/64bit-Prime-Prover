@@ -7,6 +7,7 @@
 #include <time.h>
 #include <pthread.h>
 #include </home/simon/fastmodinvpow2fns.c> // See https://github.com/FastAsChuff/Fast-Modular-Inverse-Modulo-Powers-Of-2
+#include </home/simon/modpowu64.c> // See https://github.com/FastAsChuff/Fast-Modular-Exponentiation/tree/main
 
 // gcc primetestmakewLfile3b.c -o primetestmakewLfile3b.bin -lm -pthread -O3 -march=native -Wall
 
@@ -141,33 +142,6 @@ _Bool load32bitprimes(primedivcheck_t *primedivcheck, uint64_t twotoL, uint32_t 
     primedivcheck->m[i] = 0xffffffffffffffffULL / primedivcheck->p[i];
   }
   return true;
-}
-
-
-uint32_t modpowu64b(uint32_t a, uint64_t e, uint32_t n) {
-  uint32_t res = 1;
-  uint32_t sq = a;
-  while (e) {
-    if (e & 1ULL) res = ((uint64_t)res * sq) % n;
-    sq = ((uint64_t)sq*sq) % n;
-    e >>= 1;
-  }
-  return res;
-}
-
-uint64_t modpowu64(uint64_t a, uint64_t e, uint64_t n) {
-// Returns a^e mod n
-  if (n < 2) return 0;
-  if (a < 2) return a;
-  if (n <= 0xffffffff) return modpowu64b(a % n, e, n);
-  uint64_t res = 1;
-  uint64_t sq = a;
-  while (e) {
-    if (e & 1ULL) res = ((unsigned __int128)res * sq) % n;
-    sq = ((unsigned __int128)sq*sq) % n;
-    e >>= 1;
-  }
-  return res;
 }
 
 uint32_t isqrt(uint64_t n) {
