@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include </home/simon/fastmodinvpow2fns.c> // See https://github.com/FastAsChuff/Fast-Modular-Inverse-Modulo-Powers-Of-2
+#include </home/simon/modpowu64.c> // See https://github.com/FastAsChuff/Fast-Modular-Exponentiation/tree/main
 #include </home/simon/isprime5fns.c> 
 
 // gcc pseudoprimecompare.c -o pseudoprimecompare.bin -lm -O3 -march=native -Wall
