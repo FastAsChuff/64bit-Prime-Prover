@@ -280,7 +280,6 @@ int main(int argc, char** argv) {
       if (exceptions[i] == NULL) die("Failed to allocate enough memory.");
     }
   }
-  uint64_t sum = 0;
   FILE *fp = fopen(outfilename, "w");
   if (fp == NULL) {
     printf("Failed to open %s for writing.\n", outfilename);
@@ -309,7 +308,6 @@ int main(int argc, char** argv) {
   }
   for (uint32_t i=0; i<numthreads; i++) {
     totcount += count[i];    
-    for (uint32_t j=0; j<count[i]; j++) sum += exceptions[i][j];
   }
   uint64_t *allexceptions =  malloc(totcount*sizeof(uint64_t));
   if (allexceptions == NULL) die("Failed to allocate enough memory.");
@@ -318,13 +316,6 @@ int main(int argc, char** argv) {
     memcpy(allexceptions + allexceptionsix, exceptions[i], count[i] * sizeof(uint64_t));
     allexceptionsix += count[i];
   }
-  fprintf(fp, "%lu %lu %lu %lu\n", w, L, totcount, sum);
-  qsort(allexceptions, totcount, sizeof(uint64_t), &uint64asc);
-  for (uint64_t i=0; i<totcount; i++) {
-    fprintf(fp, "%lu\n", allexceptions[i]);
-  }
-  fclose(fp);
-  free(allexceptions);
   free(primedivcheck.p);
   free(primedivcheck.a);
   free(primedivcheck.m);
@@ -334,4 +325,23 @@ int main(int argc, char** argv) {
   free(count);
   free(threads);
   free(fexargs);
+  qsort(allexceptions, totcount, sizeof(uint64_t), &uint64asc);
+  uint64_t j=0;
+  uint64_t prev=0;
+  uint64_t sum=0;
+  for (uint64_t i=0; i<totcount; i++) {
+    if (allexceptions[i] > prev) {
+      sum += allexceptions[i];
+      j++;
+    }
+    prev = allexceptions[i];
+  }
+  fprintf(fp, "%lu %lu %lu %lu\n", w, L, j, sum);
+  prev=0;
+  for (uint64_t i=0; i<totcount; i++) {
+    if (allexceptions[i] > prev) fprintf(fp, "%lu\n", allexceptions[i]);
+    prev = allexceptions[i];
+  }
+  fclose(fp);
+  free(allexceptions);
 }
